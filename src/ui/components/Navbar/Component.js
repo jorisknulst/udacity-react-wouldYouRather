@@ -32,7 +32,8 @@ const Navbar = ({
 
   /* Direct user to signin page if no user is authenticated */
   useEffect(() => {
-    if (!authedUser) history.push("/signin");
+    if (!authedUser)
+      history.push("/signin", { prevLocation: history.location.pathname });
   }, [authedUser]);
 
   const context = useThemeUI();

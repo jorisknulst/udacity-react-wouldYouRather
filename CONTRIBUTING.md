@@ -1,3 +1,6 @@
 # How to contribute
 
-The files in this repository are used in the course videos and are the starting point for all students. Because we want all students to have the same experience going through course, if your pull request alters any of the core files, then it (most likely) will not be merged into the project.
+1. Clone the repository;
+2. Run 'npm install && npm start';
+3. Commit your changes at push it to a feature branch;
+4. Create a Pull Request to the default branch (master).

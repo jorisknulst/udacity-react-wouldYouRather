@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useThemeUI, NavLink } from "theme-ui";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 
 const NavLinks = () => {
   const context = useThemeUI();
@@ -15,8 +15,8 @@ const NavLinks = () => {
       sx = { ...sx, textDecoration: "underline", color: colors.primary };
 
     return (
-      <NavLink href={route} p={2} sx={sx}>
-        {text}
+      <NavLink p={2} sx={sx}>
+        <Link to={route}>{text}</Link>
       </NavLink>
     );
   };

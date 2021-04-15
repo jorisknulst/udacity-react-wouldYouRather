@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Select, Label, Card, Box, Heading, Button } from "theme-ui";
 
 import { useFetch } from "../../hooks/useFetch";
@@ -20,7 +20,11 @@ const SignIn = ({ users, fetchUsers, setAuthedUser, isLoggedIn }) => {
 
   /* Log in as the selected user and redirect to home page */
   const logInUser = () => {
-    const cb = () => history.push("/home");
+    const {
+      location: { state }
+    } = history;
+    const toRoute = state && state.prevLocation ? state.prevLocation : "/home";
+    const cb = () => history.push(toRoute, { prevLocation: null });
 
     setAuthedUser(user, cb);
   };

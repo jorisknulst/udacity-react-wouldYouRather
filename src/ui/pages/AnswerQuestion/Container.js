@@ -7,7 +7,15 @@ import Component from "./Component";
 const mapStateToProps = ({ authedUser, users, questions }, { match }) => {
   /* Get the question from the url param */
   const questionId = match.params.id;
-  const { id, optionOne, optionTwo, author } = questions[questionId];
+  const question = questions[questionId];
+
+  if (!question) {
+    return {
+      questionDoesNotExist: true
+    };
+  }
+
+  const { id, optionOne, optionTwo, author } = question;
 
   /* Get the name of the creator of the question */
   const user = Object.values(users).find(user => user.id === author);

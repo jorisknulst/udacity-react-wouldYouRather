@@ -4,11 +4,13 @@ import { Card, Box, Grid, Flex, Heading } from "theme-ui";
 
 import Wrapper from "../../components/Wrapper";
 import Avatar from "../../components/Avatar";
+import PollNotFound from "../../components/PollNotFound";
 import Question from "./Question";
 import Result from "./Result";
 
 const AnswerQuestion = ({
   id,
+  questionDoesNotExist = false,
   optionOne = {},
   optionTwo = {},
   authorName,
@@ -17,6 +19,10 @@ const AnswerQuestion = ({
 }) => {
   const [answer, setAnswer] = useState(myVote);
   const [answered, setAnswered] = useState(false);
+
+  if (questionDoesNotExist) {
+    return <PollNotFound />;
+  }
 
   const handleChange = ({ target: { name } }) => {
     setAnswer(name);
@@ -84,15 +90,16 @@ const AnswerQuestion = ({
 
 AnswerQuestion.propTypes = {
   id: PropTypes.string,
+  questionDoesNotExist: PropTypes.bool,
   optionOne: PropTypes.shape({
-    text: PropTypes.string.isRequired
+    text: PropTypes.string
   }),
   optionTwo: PropTypes.shape({
-    text: PropTypes.string.isRequired
+    text: PropTypes.string
   }),
   authorName: PropTypes.string,
   myVote: PropTypes.string,
-  saveQuestionAnswer: PropTypes.func.isRequired
+  saveQuestionAnswer: PropTypes.func
 };
 
 export default AnswerQuestion;
