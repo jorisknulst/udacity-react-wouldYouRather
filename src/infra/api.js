@@ -141,8 +141,8 @@ export function _getQuestions() {
 function formatQuestion({ optionOneText, optionTwoText, author }) {
   return {
     id: generateUID(),
-    timestamp: Date.now(),
     author,
+    timestamp: Date.now(),
     optionOne: {
       votes: [],
       text: optionOneText
@@ -161,8 +161,8 @@ export function _saveQuestion(question) {
 
     setTimeout(() => {
       questions = {
-        ...questions,
-        [formattedQuestion.id]: formattedQuestion
+        [formattedQuestion.id]: formattedQuestion,
+        ...questions
       };
 
       users = {
@@ -178,7 +178,7 @@ export function _saveQuestion(question) {
   });
 }
 
-export function _saveQuestionAnswer({ authedUser, qid, answer }) {
+export function _saveQuestionAnswer({ authedUser, id, answer }) {
   return new Promise((res, rej) => {
     setTimeout(() => {
       users = {
@@ -187,23 +187,38 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
           ...users[authedUser],
           answers: {
             ...users[authedUser].answers,
-            [qid]: answer
+            [id]: answer
           }
         }
       };
 
+      /* If the question was already answered by the user we should remove the
+      latest answer and rather replace it with the new answer */
+      const OPTION_ONE = "optionOne";
+      const OPTION_TWO = "optionTwo";
+      const answerIsOptionOne = answer === OPTION_ONE;
+      const answerIsOptionTwo = answer === OPTION_TWO;
+
       questions = {
         ...questions,
-        [qid]: {
-          ...questions[qid],
-          [answer]: {
-            ...questions[qid][answer],
-            votes: questions[qid][answer].votes.concat([authedUser])
+        [id]: {
+          ...questions[id],
+          optionOne: {
+            ...questions[id].optionOne,
+            votes: answerIsOptionTwo
+              ? questions[id].optionOne.votes.filter(n => n !== authedUser)
+              : [...questions[id].optionOne.votes, authedUser]
+          },
+          optionTwo: {
+            ...questions[id].optionTwo,
+            votes: answerIsOptionOne
+              ? questions[id].optionTwo.votes.filter(n => n !== authedUser)
+              : [...questions[id].optionTwo.votes, authedUser]
           }
         }
       };
 
       res();
-    }, 500);
+    }, 1000);
   });
 }
